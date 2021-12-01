@@ -45,4 +45,19 @@ Public Class Main
         End If
     End Sub
 
+    Private Sub tbCorte_KeyPress(sender As Object, e As KeyPressEventArgs) Handles tbCorte.KeyPress
+        If IsNumeric(e.KeyChar) Or e.KeyChar = Convert.ToChar(Keys.Back) Then
+            e.Handled = False
+        Else
+            e.Handled = True
+        End If
+    End Sub
+
+    Private Sub tbImpresion_KeyPress(sender As Object, e As KeyPressEventArgs) Handles tbImpresion.KeyPress
+        If IsNumeric(e.KeyChar) Or e.KeyChar = Convert.ToChar(Keys.Back) Then
+            e.Handled = False
+        Else
+            e.Handled = True
+        End If
+    End Sub
 End Class

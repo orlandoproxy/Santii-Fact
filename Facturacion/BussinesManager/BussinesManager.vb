@@ -20,21 +20,42 @@
         Dim ListaFechas As Object = New List(Of Periodos)
         Dim PeriodoNum = ParsePeriodo(PeriodoText)
         Dim periodoInicial As Periodos = New Periodos
-
+        PeriodoNum -= 1
         Dim FechaPeriodoInicial As Date = fechaInicial
-        Dim FechaPeriodoFinal As Date = New Date(fechaInicial.Year, fechaInicial.Month + PeriodoNum, DiaCorte)
-        Dim FechaPeridoImpresion As Date = New Date(FechaPeriodoFinal.Year, FechaPeriodoFinal.Month, DiaImpresion)
+        Dim FechaPeriodoFinal As Date = New Date(fechaInicial.Year, fechaInicial.Month + PeriodoNum, 1)
+        Dim FechaPeridoImpresion As Date = New Date(FechaPeriodoFinal.Year, FechaPeriodoFinal.Month, 1)
+        Try
+            FechaPeriodoFinal = New Date(FechaPeriodoFinal.Year, FechaPeriodoFinal.Month, DiaCorte)
+        Catch ex As Exception
+            FechaPeriodoFinal = FechaPeriodoFinal.AddMonths(1).AddDays(-1)
+        End Try
+        Try
+            FechaPeridoImpresion = New Date(FechaPeriodoFinal.Year, FechaPeriodoFinal.Month, DiaImpresion)
+        Catch ex As Exception
+            FechaPeridoImpresion = FechaPeridoImpresion.AddMonths(1).AddDays(-1)
+        End Try
         periodoInicial.FechaInicial = FechaPeriodoInicial
         periodoInicial.FechaFinal = FechaPeriodoFinal
         periodoInicial.FechaImpresion = FechaPeridoImpresion
         ListaFechas.add(periodoInicial)
         NumPeridos -= 1
-        Do While NumPeridos > 0
+
+        Do While NumPeridos >= 0
             periodoInicial = New Periodos
             'fecha inicial es un perido despues
+            'FechaPeriodoInicial = New Date(FechaPeriodoFinal.Year, FechaPeriodoFinal.Month + 1, fechaInicial.Day)
             FechaPeriodoInicial = FechaPeriodoFinal.AddDays(1)
-            FechaPeriodoFinal = New Date(FechaPeriodoInicial.Year, FechaPeriodoInicial.Month + PeriodoNum, DiaCorte)
-            FechaPeridoImpresion = New Date(FechaPeriodoFinal.Year, FechaPeriodoFinal.Month, DiaImpresion)
+            Try
+                FechaPeriodoFinal = New Date(FechaPeriodoInicial.Year, FechaPeriodoInicial.Month + PeriodoNum + 1, DiaCorte)
+            Catch ex As Exception
+                FechaPeriodoFinal = New Date(FechaPeriodoFinal.Year, FechaPeriodoFinal.Month + PeriodoNum + 1, 1)
+                FechaPeriodoFinal = FechaPeriodoFinal.AddMonths(1).AddDays(-1)
+            End Try
+            Try
+                FechaPeridoImpresion = New Date(FechaPeriodoFinal.Year, FechaPeriodoFinal.Month, DiaImpresion)
+            Catch ex As Exception
+                FechaPeridoImpresion = FechaPeridoImpresion.AddMonths(1).AddDays(-1)
+            End Try
             periodoInicial.FechaInicial = FechaPeriodoInicial
             periodoInicial.FechaFinal = FechaPeriodoFinal
             periodoInicial.FechaImpresion = FechaPeridoImpresion
